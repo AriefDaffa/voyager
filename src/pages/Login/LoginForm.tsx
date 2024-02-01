@@ -5,6 +5,7 @@ import Flexer from '@/components/Flexer';
 import Header from '@/components/Typography/Header';
 import SubHeader from '@/components/Typography/SubHeader';
 import { primary } from '@/constants/colors';
+import Button from '@/components/Button';
 
 interface LoginFormProps {}
 
@@ -41,12 +42,7 @@ const LoginForm: FC<LoginFormProps> = () => {
           />
         </Flexer>
       </Flexer>
-      <button
-        type="submit"
-        className="bg-primary p-2 rounded-md font-bold text-white mt-4 mb-8 hover:bg-primaryDarker"
-      >
-        Submit
-      </button>
+      <Button text="Submit" />
     </form>
   );
 };
