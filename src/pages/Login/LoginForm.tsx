@@ -4,8 +4,9 @@ import type { FC } from 'react';
 import Flexer from '@/components/Flexer';
 import Header from '@/components/Typography/Header';
 import SubHeader from '@/components/Typography/SubHeader';
-import { primary } from '@/constants/colors';
 import Button from '@/components/Button';
+import Input from '@/components/Input';
+import { primary } from '@/constants/colors';
 
 interface LoginFormProps {}
 
@@ -27,22 +28,22 @@ const LoginForm: FC<LoginFormProps> = () => {
         </SubHeader>
       </Flexer>
       <Flexer flexDirection="col" className="gap-4">
-        <Flexer flexDirection="col" className="gap-1">
-          <label className="text-sm font-semibold">Email</label>
-          <input
-            className="p-2 outline-none border border-[#dadada] rounded-md"
-            type="email"
-          />
-        </Flexer>
-        <Flexer flexDirection="col" className="gap-1">
-          <label className="text-sm font-semibold">Password</label>
-          <input
-            className="p-2 outline-none border border-[#dadada] rounded-md"
-            type="password"
-          />
-        </Flexer>
+        <Input
+          id="login-email"
+          inputType="email"
+          label="Email"
+          placeholder="email@mail.com"
+        />
+        <Input
+          id="login-password"
+          inputType="password"
+          label="Password"
+          placeholder=""
+        />
       </Flexer>
-      <Button text="Submit" />
+      <div className="w-full mt-3">
+        <Button text="Submit" className="w-full" />
+      </div>
     </form>
   );
 };
