@@ -6,6 +6,7 @@ import Tourists from './pages/Tourists';
 import NotFound from './pages/NotFound';
 import Profile from './pages/Profile';
 import TouristDetail from './pages/TouristDetail';
+import Register from './pages/Register';
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -16,6 +17,10 @@ const Router = () => {
     {
       path: '/login',
       element: <Login />,
+    },
+    {
+      path: '/register',
+      element: <Register />,
     },
     {
       path: '/tourists',

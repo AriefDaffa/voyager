@@ -9,9 +9,9 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import { primary } from '@/constants/colors';
 
-interface LoginFormProps {}
+interface RegisterFormProps {}
 
-const LoginForm: FC<LoginFormProps> = () => {
+const RegisterForm: FC<RegisterFormProps> = () => {
   const navigate = useNavigate();
 
   return (
@@ -20,20 +20,26 @@ const LoginForm: FC<LoginFormProps> = () => {
       <Flexer flexDirection="col" className="gap-1 my-4">
         <Header>
           <div>
-            Sign In to <span className="text-primary">Voyager</span>
+            Sign Up to <span className="text-primary">Voyager</span>
           </div>
         </Header>
         <SubHeader>
-          New Here?{' '}
+          Already have an account?{' '}
           <span
-            onClick={() => navigate('/register')}
+            onClick={() => navigate('/login')}
             className="underline underline-offset-2 cursor-pointer"
           >
-            Create an account
+            Sign In
           </span>
         </SubHeader>
       </Flexer>
       <Flexer flexDirection="col" className="gap-4">
+        <Input
+          id="login-name"
+          inputType="text"
+          label="Name"
+          placeholder="John"
+        />
         <Input
           id="login-email"
           inputType="email"
@@ -54,4 +60,4 @@ const LoginForm: FC<LoginFormProps> = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
