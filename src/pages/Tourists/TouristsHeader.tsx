@@ -5,9 +5,13 @@ import Flexer from '@/components/Flexer';
 
 interface TouristsHeaderProps {
   totalTourist: number;
+  handleOpenModal: () => void;
 }
 
-const TouristsHeader: FC<TouristsHeaderProps> = ({ totalTourist }) => {
+const TouristsHeader: FC<TouristsHeaderProps> = ({
+  totalTourist,
+  handleOpenModal,
+}) => {
   return (
     <Flexer className="justify-between flex-col md:flex-row">
       <div>
@@ -23,7 +27,7 @@ const TouristsHeader: FC<TouristsHeaderProps> = ({ totalTourist }) => {
         </div>
       </div>
       <Flexer className="items-center w-full justify-end mb-4 md:w-auto">
-        <Button text="Add Tourist" />
+        <Button text="Add Tourist" onClick={handleOpenModal} />
       </Flexer>
     </Flexer>
   );
