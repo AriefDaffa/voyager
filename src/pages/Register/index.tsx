@@ -5,7 +5,6 @@ import type { ChangeEvent, FC, SyntheticEvent } from 'react';
 import Container from '@/components/Container';
 import Flexer from '@/components/Flexer';
 import Alert from '@/components/Alert';
-import { useUserContext } from '@/context/UserContext';
 import { register } from '@/repository/user/register';
 
 import RegisterForm from './RegisterForm';
@@ -18,8 +17,6 @@ const Register: FC<RegisterProps> = () => {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoginErr, setIsLoginErr] = useState(false);
-
-  const { handleUserLogin } = useUserContext();
 
   const navigate = useNavigate();
 
@@ -49,12 +46,7 @@ const Register: FC<RegisterProps> = () => {
 
       if (request.status >= 200 && request.status < 400) {
         if (response?.data?.id) {
-          const path = localStorage.getItem('voy-lastPath');
-
-          handleUserLogin(response?.data);
-          navigate(typeof path === 'string' ? path : '/');
-
-          localStorage.removeItem('voy-lastPath');
+          navigate('/login');
         }
       } else {
         setIsLoginErr(true);
