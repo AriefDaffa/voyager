@@ -1,10 +1,12 @@
-import type { FC } from 'react';
+import type { ChangeEvent, FC } from 'react';
 
 interface InputProps {
   label: string;
   inputType: string;
   placeholder: string;
   id: string;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   className?: string;
 }
 
@@ -13,7 +15,9 @@ const Input: FC<InputProps> = ({
   inputType,
   label,
   placeholder,
-  className,
+  value,
+  onChange,
+  className = '',
 }) => {
   return (
     <div className={className}>
@@ -26,6 +30,8 @@ const Input: FC<InputProps> = ({
       <input
         type={inputType}
         id={id}
+        value={value}
+        onChange={onChange}
         className="border text-sm rounded-lg block w-full p-2.5 outline-none"
         placeholder={placeholder}
       />

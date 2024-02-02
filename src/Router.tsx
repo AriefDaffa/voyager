@@ -7,13 +7,11 @@ import NotFound from './pages/NotFound';
 import Profile from './pages/Profile';
 import TouristDetail from './pages/TouristDetail';
 import Register from './pages/Register';
+import ProtectedRoute from './components/ProtectedRoute';
+import { UserContextProvider } from './context/UserContext';
 
 const Router = () => {
   const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <Home />,
-    },
     {
       path: '/login',
       element: <Login />,
@@ -23,16 +21,25 @@ const Router = () => {
       element: <Register />,
     },
     {
-      path: '/tourists',
-      element: <Tourists />,
-    },
-    {
-      path: '/tourists/:id',
-      element: <TouristDetail />,
-    },
-    {
-      path: '/profile',
-      element: <Profile />,
+      element: <ProtectedRoute />,
+      children: [
+        {
+          path: '/',
+          element: <Home />,
+        },
+        {
+          path: '/profile',
+          element: <Profile />,
+        },
+        {
+          path: '/tourists',
+          element: <Tourists />,
+        },
+        {
+          path: '/tourists/:id',
+          element: <TouristDetail />,
+        },
+      ],
     },
     {
       path: '/*',
@@ -40,7 +47,11 @@ const Router = () => {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <UserContextProvider>
+      <RouterProvider router={router} />
+    </UserContextProvider>
+  );
 };
 
 export default Router;
