@@ -13,6 +13,7 @@ interface TouristsTableItemProps extends Tourists {
   index: number;
   handleEditVal: (val: EditValArgs) => void;
   handleOpenModal: () => void;
+  handleOpenDelete: () => void;
 }
 
 const TouristsTableItem: FC<TouristsTableItemProps> = ({
@@ -24,6 +25,7 @@ const TouristsTableItem: FC<TouristsTableItemProps> = ({
   tourist_name,
   handleEditVal,
   handleOpenModal,
+  handleOpenDelete,
 }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
 
@@ -46,10 +48,23 @@ const TouristsTableItem: FC<TouristsTableItemProps> = ({
           });
         },
       },
-      { id: 2, name: <div>Delete</div>, onClick: () => {} },
+      {
+        id: 2,
+        name: <div>Delete</div>,
+        onClick: () => {
+          handleOpenDelete();
+          handleEditVal({
+            email: tourist_email,
+            name: tourist_name,
+            location: tourist_location,
+            id,
+          });
+        },
+      },
     ],
     [
       handleEditVal,
+      handleOpenDelete,
       handleOpenModal,
       id,
       tourist_email,

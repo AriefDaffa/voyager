@@ -11,11 +11,13 @@ import useGetListTourist from '@/repository/tourist/list-tourist/useGetListTouri
 import { useUserContext } from '@/context/UserContext';
 import { updateTourist } from '@/repository/tourist/update-tourist';
 import { createTourist } from '@/repository/tourist/create-tourist';
+import { deleteTourist } from '@/repository/tourist/delete-tourist';
 
 import TouristsHeader from './TouristsHeader';
 import TouristsTable from './TouristsTable';
 import TouristsModal from './TouristsModal';
-import { EditValArgs } from './types';
+import TouristDeleteModal from './TouristDeleteModal';
+import type { EditValArgs } from './types';
 
 interface TouristsProps {}
 
@@ -31,6 +33,7 @@ const Tourists: FC<TouristsProps> = () => {
 
   const [page, setPage] = useState(1);
   const [openModal, setOpenModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
   const { user } = useUserContext();
@@ -129,6 +132,58 @@ const Tourists: FC<TouristsProps> = () => {
     }
   };
 
+  const handleOpenDelete = () => {
+    setDeleteModal(true);
+
+    if (editMode) {
+      setPayload({ email: '', name: '', location: '', id: '' });
+      setEditMode(false);
+    }
+  };
+
+  const handleCloseDelete = () => {
+    setDeleteModal(false);
+
+    if (editMode) {
+      setPayload({ email: '', name: '', location: '', id: '' });
+      setEditMode(false);
+    }
+  };
+
+  const handleDeleteTourist = async () => {
+    try {
+      const request = await deleteTourist(
+        {
+          tourist_email: payload.email,
+          tourist_location: payload.location,
+          tourist_name: payload.name,
+        },
+        payload.id,
+        user.Token
+      );
+
+      const response = await request.json();
+
+      setIsLoading(false);
+      setDeleteModal(false);
+
+      if (request.status >= 200 && request.status < 400) {
+        if (response?.id) {
+          setMsg({ type: 'success', msg: 'Tourist deleted successfully ' });
+        }
+      } else {
+        setMsg({
+          type: 'warning',
+          msg: 'Failed to update, please try again',
+        });
+      }
+    } catch (error) {
+      setIsLoading(false);
+      setDeleteModal(false);
+      setMsg({ type: 'warning', msg: 'Failed to delete, please try again' });
+    }
+  };
+
   useEffect(() => {
     if (msg.type !== '') {
       setTimeout(() => {
@@ -136,8 +191,6 @@ const Tourists: FC<TouristsProps> = () => {
       }, 2000);
     }
   }, [msg]);
-
-  console.log(msg);
 
   return (
     <>
@@ -152,6 +205,7 @@ const Tourists: FC<TouristsProps> = () => {
           tourists={data.tourists}
           handleEditVal={handleEditVal}
           handleOpenModal={handleOpenModal}
+          handleOpenDelete={handleOpenDelete}
         />
         <Flexer className="mt-2 justify-center">
           <Pagination
@@ -171,6 +225,16 @@ const Tourists: FC<TouristsProps> = () => {
             isLoading={isLoading}
             handleChange={onChangeHandler}
             handleSubmit={handleCreateTourist}
+          />
+        </Modal>
+      )}
+      {deleteModal && (
+        <Modal handleClose={handleCloseDelete}>
+          <TouristDeleteModal
+            name={payload.name}
+            email={payload.email}
+            isLoading={isLoading}
+            handleSubmit={handleDeleteTourist}
           />
         </Modal>
       )}

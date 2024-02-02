@@ -7,8 +7,9 @@ import type { EditValArgs, Tourists } from '../types';
 interface TouristsTableProps {
   currentPage: number;
   tourists: Tourists[];
-  handleEditVal: (val: EditValArgs) => void;
   handleOpenModal: () => void;
+  handleOpenDelete: () => void;
+  handleEditVal: (val: EditValArgs) => void;
 }
 
 const TouristsTable: FC<TouristsTableProps> = ({
@@ -16,6 +17,7 @@ const TouristsTable: FC<TouristsTableProps> = ({
   tourists,
   handleEditVal,
   handleOpenModal,
+  handleOpenDelete,
 }) => {
   return (
     <div className="">
@@ -29,6 +31,7 @@ const TouristsTable: FC<TouristsTableProps> = ({
               index={currentPage > 1 ? (currentPage - 1) * 10 + idx : idx}
               handleEditVal={handleEditVal}
               handleOpenModal={handleOpenModal}
+              handleOpenDelete={handleOpenDelete}
             />
           ))}
         </tbody>
