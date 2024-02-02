@@ -72,9 +72,7 @@ const Login: FC<LoginProps> = () => {
         />
         {isLoginErr && (
           <div className="self-center w-full max-w-[500px] pt-4 ">
-            <Alert>
-              Terjadi kesalahan pada proses login, silakan coba kembali
-            </Alert>
+            <Alert>There is a problem, please try again</Alert>
           </div>
         )}
       </Flexer>
