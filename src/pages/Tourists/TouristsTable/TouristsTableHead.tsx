@@ -6,13 +6,19 @@ const TouristsTableHead: FC<TouristsTableHeadProps> = () => {
   return (
     <thead>
       <tr className="text-left">
-        <th className="py-4 px-3 bg-gray-200 border border-gray-300">No.</th>
-        <th className="py-4 px-3 bg-gray-200 border border-gray-300">Name</th>
-        <th className="py-4 px-3 bg-gray-200 border border-gray-300">Email</th>
-        <th className="py-4 px-3 bg-gray-200 border border-r-0 border-gray-300">
+        <th className="py-4 px-3 bg-primary text-white  rounded-tl-lg border-white">
+          No.
+        </th>
+        <th className="py-4 px-3 bg-primary text-white border border-white">
+          Name
+        </th>
+        <th className="py-4 px-3 bg-primary text-white border border-white">
+          Email
+        </th>
+        <th className="py-4 px-3 bg-primary text-white border border-r-0 border-white">
           Location
         </th>
-        <th className="py-4 px-3 bg-gray-200 border border-l-0 border-gray-300"></th>
+        <th className="py-4 px-3 bg-primary text-white border border-l-0 border-white rounded-tr-lg"></th>
       </tr>
     </thead>
   );

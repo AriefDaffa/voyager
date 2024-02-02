@@ -1,15 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { useMemo, useState } from 'react';
+import { useClickOutside } from '@mantine/hooks';
 import type { FC, MouseEvent } from 'react';
 
 import Flexer from '@/components/Flexer';
 import Dropdown from '@/components/Dropdown';
 
-import { Tourists } from '../types';
+import { EditValArgs, Tourists } from '../types';
 
 interface TouristsTableItemProps extends Tourists {
   index: number;
+  handleEditVal: (val: EditValArgs) => void;
+  handleOpenModal: () => void;
 }
 
 const TouristsTableItem: FC<TouristsTableItemProps> = ({
@@ -19,17 +22,40 @@ const TouristsTableItem: FC<TouristsTableItemProps> = ({
   tourist_location,
   tourist_email,
   tourist_name,
+  handleEditVal,
+  handleOpenModal,
 }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
 
   const navigate = useNavigate();
 
+  const ref = useClickOutside(() => setOpenDropdown(false));
+
   const dropdownMenu = useMemo(
     () => [
-      { id: 1, name: 'Edit', onClick: () => {} },
-      { id: 2, name: 'Delete', onClick: () => {} },
+      {
+        id: 1,
+        name: <div>Edit</div>,
+        onClick: () => {
+          handleOpenModal();
+          handleEditVal({
+            email: tourist_email,
+            name: tourist_name,
+            location: tourist_location,
+            id,
+          });
+        },
+      },
+      { id: 2, name: <div>Delete</div>, onClick: () => {} },
     ],
-    []
+    [
+      handleEditVal,
+      handleOpenModal,
+      id,
+      tourist_email,
+      tourist_location,
+      tourist_name,
+    ]
   );
 
   const handleThreedots = (e: MouseEvent<HTMLDivElement>) => {
@@ -42,7 +68,7 @@ const TouristsTableItem: FC<TouristsTableItemProps> = ({
       className=" hover:bg-gray-200 cursor-pointer"
       onClick={() => navigate(`/tourists/${id}`)}
     >
-      <td className="py-4 px-3 border border-gray-300">{index + 1}</td>
+      <td className={`py-4 px-3 border border-gray-300`}>{index + 1}</td>
       <td className="py-4 px-3 border border-gray-300">
         <Flexer className="items-center gap-2 col-span-4">
           <div className="w-10 h-10 rounded-full">
@@ -67,14 +93,14 @@ const TouristsTableItem: FC<TouristsTableItemProps> = ({
       </td>
       <td className="py-4 px-3 border border-l-0 border-gray-300">
         <div
-          className="relative w-min rounded-full hover:bg-gray-400"
+          className="relative w-min rounded-lg p-2 float-right hover:bg-gray-300"
           onClick={handleThreedots}
         >
           <BsThreeDotsVertical
             size={14}
-            className="w-6 h-6 text-gray-500 cursor-pointer "
+            className="w-6 h-6 text-gray-500 cursor-pointer"
           />
-          {openDropdown && <Dropdown menu={dropdownMenu} />}
+          {openDropdown && <Dropdown menu={dropdownMenu} ref={ref} />}
         </div>
       </td>
     </tr>

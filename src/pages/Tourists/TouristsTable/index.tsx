@@ -2,17 +2,24 @@ import type { FC } from 'react';
 
 import TouristsTableHead from './TouristsTableHead';
 import TouristsTableItem from './TouristsTableItem';
-import type { Tourists } from '../types';
+import type { EditValArgs, Tourists } from '../types';
 
 interface TouristsTableProps {
   currentPage: number;
   tourists: Tourists[];
+  handleEditVal: (val: EditValArgs) => void;
+  handleOpenModal: () => void;
 }
 
-const TouristsTable: FC<TouristsTableProps> = ({ currentPage, tourists }) => {
+const TouristsTable: FC<TouristsTableProps> = ({
+  currentPage,
+  tourists,
+  handleEditVal,
+  handleOpenModal,
+}) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="table-auto overflow-scroll w-full border-collapse ">
+    <div className="">
+      <table className="table-auto w-full border-collapse ">
         <TouristsTableHead />
         <tbody>
           {tourists.map((item, idx) => (
@@ -20,6 +27,8 @@ const TouristsTable: FC<TouristsTableProps> = ({ currentPage, tourists }) => {
               key={item.id}
               {...item}
               index={currentPage > 1 ? (currentPage - 1) * 10 + idx : idx}
+              handleEditVal={handleEditVal}
+              handleOpenModal={handleOpenModal}
             />
           ))}
         </tbody>

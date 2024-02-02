@@ -7,3 +7,10 @@ export interface Tourists {
   tourist_location: string;
   tourist_name: string;
 }
+
+export interface EditValArgs {
+  name: string;
+  email: string;
+  location: string;
+  id: string;
+}

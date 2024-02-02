@@ -12,8 +12,7 @@ import { useUserContext } from '@/context/UserContext';
 interface LoginProps {}
 
 const Login: FC<LoginProps> = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [payload, setPayload] = useState({ email: '', password: '' });
   const [isLoading, setIsLoading] = useState(false);
   const [isLoginErr, setIsLoginErr] = useState(false);
 
@@ -21,12 +20,8 @@ const Login: FC<LoginProps> = () => {
 
   const navigate = useNavigate();
 
-  const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const onPassChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setPayload((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: SyntheticEvent) => {
@@ -35,7 +30,10 @@ const Login: FC<LoginProps> = () => {
     setIsLoading(true);
 
     try {
-      const request = await login({ email, password });
+      const request = await login({
+        email: payload.email,
+        password: payload.password,
+      });
 
       const response = await request.json();
 
@@ -73,11 +71,10 @@ const Login: FC<LoginProps> = () => {
         <Flexer flexDirection="col" className="justify-center h-screen">
           <LoginForm
             isLoading={isLoading}
-            onEmailChange={onEmailChange}
-            onPassChange={onPassChange}
-            email={email}
-            password={password}
+            email={payload.email}
+            password={payload.password}
             handleSubmit={handleSubmit}
+            handleChange={onChangeHandler}
           />
         </Flexer>
       </Container>

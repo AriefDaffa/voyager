@@ -14,21 +14,17 @@ interface RegisterFormProps {
   password: string;
   name: string;
   isLoading: boolean;
-  onEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onPassChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: SyntheticEvent) => void;
 }
 
 const RegisterForm: FC<RegisterFormProps> = ({
   email,
-  handleSubmit,
-  isLoading,
-  name,
-  onEmailChange,
-  onNameChange,
-  onPassChange,
   password,
+  name,
+  isLoading,
+  handleChange,
+  handleSubmit,
 }) => {
   const navigate = useNavigate();
 
@@ -57,27 +53,30 @@ const RegisterForm: FC<RegisterFormProps> = ({
       <Flexer flexDirection="col" className="gap-4">
         <Input
           id="regist-name"
+          name="name"
           inputType="text"
           label="Name"
           placeholder="John"
           value={name}
-          onChange={onNameChange}
+          onChange={handleChange}
         />
         <Input
           id="regist-email"
+          name="email"
           inputType="email"
           label="Email"
           placeholder="email@mail.com"
           value={email}
-          onChange={onEmailChange}
+          onChange={handleChange}
         />
         <Input
           id="regist-password"
+          name="password"
           inputType="password"
           label="Password"
           placeholder=""
           value={password}
-          onChange={onPassChange}
+          onChange={handleChange}
         />
       </Flexer>
       <div className="w-full mt-3">

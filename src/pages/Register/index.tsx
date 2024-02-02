@@ -11,22 +11,12 @@ import Toast from '@/components/Toast';
 interface RegisterProps {}
 
 const Register: FC<RegisterProps> = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [payload, setPayload] = useState({ email: '', name: '', password: '' });
   const [toastMsg, setToastMsg] = useState({ type: '', msg: '' });
 
-  const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const onPassChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const onNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setPayload((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: SyntheticEvent) => {
@@ -34,7 +24,11 @@ const Register: FC<RegisterProps> = () => {
     setIsLoading(true);
 
     try {
-      const request = await register({ email, password, name });
+      const request = await register({
+        email: payload.email,
+        password: payload.password,
+        name: payload.name,
+      });
 
       const response = await request.json();
 
@@ -72,14 +66,12 @@ const Register: FC<RegisterProps> = () => {
       <Container className="z-20">
         <Flexer flexDirection="col" className="justify-center h-screen">
           <RegisterForm
-            email={email}
-            name={name}
-            password={password}
-            onEmailChange={onEmailChange}
-            onNameChange={onNameChange}
-            onPassChange={onPassChange}
+            email={payload.email}
+            name={payload.name}
+            password={payload.password}
             isLoading={isLoading}
             handleSubmit={handleSubmit}
+            handleChange={onChangeHandler}
           />
         </Flexer>
       </Container>

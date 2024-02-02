@@ -1,5 +1,7 @@
+import { ReactNode } from 'react';
+
 export interface DropdownMenu {
   id: number;
-  name: string;
+  name: ReactNode;
   onClick: () => void;
 }

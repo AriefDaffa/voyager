@@ -13,18 +13,16 @@ interface LoginFormProps {
   email: string;
   password: string;
   isLoading: boolean;
-  onEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onPassChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: SyntheticEvent) => void;
+  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const LoginForm: FC<LoginFormProps> = ({
   email,
   password,
   isLoading,
-  onEmailChange,
-  onPassChange,
   handleSubmit,
+  handleChange,
 }) => {
   const navigate = useNavigate();
 
@@ -52,20 +50,22 @@ const LoginForm: FC<LoginFormProps> = ({
       </Flexer>
       <Flexer flexDirection="col" className="gap-4">
         <Input
+          name="email"
           id="login-email"
           inputType="email"
           label="Email"
-          placeholder="email@mail.com"
+          placeholder="Email"
           value={email}
-          onChange={onEmailChange}
+          onChange={handleChange}
         />
         <Input
+          name="password"
           id="login-password"
           inputType="password"
           label="Password"
-          placeholder=""
+          placeholder="Password"
           value={password}
-          onChange={onPassChange}
+          onChange={handleChange}
         />
       </Flexer>
       <div className="w-full mt-3">

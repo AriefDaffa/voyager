@@ -17,7 +17,7 @@ const Button: FC<ButtonProps> = ({
     <button
       type="submit"
       onClick={onClick}
-      className={`p-2 rounded-md font-bold text-white ${className} ${
+      className={`p-2 rounded-md font-medium text-white ${className} ${
         disabled
           ? 'bg-gray-300 cursor-default'
           : 'bg-primary hover:bg-primaryDarker'
