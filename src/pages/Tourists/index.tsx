@@ -6,7 +6,8 @@ import Navbar from '@/components/Navbar';
 import Pagination from '@/components/Pagination';
 import Flexer from '@/components/Flexer';
 import Modal from '@/components/Modal';
-import dummyTourists from '@/data/tourists_data.json';
+import useGetListTourist from '@/repository/tourist/list-tourist/useGetListTourist';
+import { useUserContext } from '@/context/UserContext';
 
 import TouristsHeader from './TouristsHeader';
 import TouristsTable from './TouristsTable';
@@ -17,6 +18,10 @@ interface TouristsProps {}
 const Tourists: FC<TouristsProps> = () => {
   const [page, setPage] = useState(1);
   const [openModal, setOpenModal] = useState(false);
+
+  const { user } = useUserContext();
+
+  const { data } = useGetListTourist({ token: user.Token, page });
 
   const handlePageChange = (val: number) => {
     setPage(val);
@@ -34,14 +39,14 @@ const Tourists: FC<TouristsProps> = () => {
     <Container className="px-2 py-24 h-auto md:px-4">
       <Navbar />
       <TouristsHeader
-        totalTourist={dummyTourists.totalrecord}
+        totalTourist={data.totalrecord}
         handleOpenModal={handleOpenModal}
       />
-      <TouristsTable tourists={dummyTourists.data} />
+      <TouristsTable currentPage={page} tourists={data.tourists} />
       <Flexer className="mt-2 justify-center">
         <Pagination
           currentPage={page}
-          totalPage={13}
+          totalPage={data.total_pages}
           handlePageChange={handlePageChange}
         />
       </Flexer>
