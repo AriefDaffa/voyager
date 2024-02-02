@@ -1,16 +1,30 @@
 import { useState } from 'react';
+import { IoMdArrowBack } from 'react-icons/io';
+import { useNavigate, useParams } from 'react-router-dom';
 import type { FC } from 'react';
 
 import Container from '@/components/Container';
 import Navbar from '@/components/Navbar';
 import Flexer from '@/components/Flexer';
-import dummyTourist from '@/data/tourist_data.json';
 import Button from '@/components/Button';
+import useGetTouristDetail from '@/repository/tourist/detail-tourist/useGetTouristDetail';
+import { useUserContext } from '@/context/UserContext';
 
 interface TouristDetailProps {}
 
 const TouristDetail: FC<TouristDetailProps> = () => {
   const [activateUpdate, setActivateUpdate] = useState(false);
+
+  const { user } = useUserContext();
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const id = params?.id || '';
+
+  const { data } = useGetTouristDetail({
+    id,
+    token: user.Token,
+  });
 
   const updateMode = () => {
     setActivateUpdate(!activateUpdate);
@@ -19,13 +33,19 @@ const TouristDetail: FC<TouristDetailProps> = () => {
   return (
     <Container className="px-2 h-screen pt-24 md:px-4">
       <Navbar />
-      <div>Back</div>
+      <div>
+        <IoMdArrowBack
+          size={22}
+          className="cursor-pointer"
+          onClick={() => navigate('/tourists')}
+        />
+      </div>
       <Flexer className="justify-center gap-4 items-center">
         <Flexer className="bg-white p-2 rounded-lg relative gap-2 w-5/6 flex-col md:flex-row md:w3/4">
           <Flexer className="justify-center">
             <div className="h-full w-64">
               <img
-                src={dummyTourist.tourist_profilepicture}
+                src={data.tourist_profilepicture}
                 alt=""
                 className="rounded-lg w-full h-full object-cover"
               />
@@ -38,11 +58,11 @@ const TouristDetail: FC<TouristDetailProps> = () => {
                 <input
                   className="p-2 outline-none border border-[#dadada] rounded-md"
                   type="text"
-                  defaultValue={dummyTourist.tourist_name}
+                  defaultValue={data.tourist_name}
                 />
               ) : (
                 <div className="font-bold text-xl md:text-2xl lg:text-3xl">
-                  {dummyTourist.tourist_name}
+                  {data.tourist_name}
                 </div>
               )}
             </Flexer>
@@ -52,11 +72,11 @@ const TouristDetail: FC<TouristDetailProps> = () => {
                 <input
                   className="p-2 outline-none border border-[#dadada] rounded-md"
                   type="email"
-                  defaultValue={dummyTourist.tourist_email}
+                  defaultValue={data.tourist_email}
                 />
               ) : (
                 <div className="font-bold text-xl md:text-2xl lg:text-3xl">
-                  {dummyTourist.tourist_email}
+                  {data.tourist_email}
                 </div>
               )}
             </Flexer>
@@ -66,11 +86,11 @@ const TouristDetail: FC<TouristDetailProps> = () => {
                 <input
                   className="p-2 outline-none border border-[#dadada] rounded-md"
                   type="text"
-                  defaultValue={dummyTourist.tourist_location}
+                  defaultValue={data.tourist_location}
                 />
               ) : (
                 <div className="font-bold text-xl md:text-2xl lg:text-3xl">
-                  {dummyTourist.tourist_location}
+                  {data.tourist_location}
                 </div>
               )}
             </Flexer>
