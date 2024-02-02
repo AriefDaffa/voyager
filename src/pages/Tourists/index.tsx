@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ChangeEvent, FC, SyntheticEvent } from 'react';
 
 import Container from '@/components/Container';
@@ -6,13 +6,14 @@ import Navbar from '@/components/Navbar';
 import Pagination from '@/components/Pagination';
 import Flexer from '@/components/Flexer';
 import Modal from '@/components/Modal';
+import Toast from '@/components/Toast';
 import useGetListTourist from '@/repository/tourist/list-tourist/useGetListTourist';
 import { useUserContext } from '@/context/UserContext';
+import { createTourist } from '@/repository/tourist/create-tourist';
 
 import TouristsHeader from './TouristsHeader';
 import TouristsTable from './TouristsTable';
 import TouristsModal from './TouristsModal';
-import { createTourist } from '@/repository/tourist/create-tourist';
 
 interface TouristsProps {}
 
@@ -21,8 +22,8 @@ const Tourists: FC<TouristsProps> = () => {
   const [location, setLocation] = useState('');
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isCreateError, setIsCreateError] = useState(false);
-  //
+  const [msg, setMsg] = useState({ type: '', msg: '' });
+
   const [page, setPage] = useState(1);
   const [openModal, setOpenModal] = useState(false);
 
@@ -56,7 +57,6 @@ const Tourists: FC<TouristsProps> = () => {
 
   const handleCreateTourist = async (e: SyntheticEvent) => {
     e.preventDefault();
-    setIsCreateError(false);
     setIsLoading(true);
 
     try {
@@ -74,48 +74,63 @@ const Tourists: FC<TouristsProps> = () => {
       setIsLoading(false);
 
       if (request.status >= 200 && request.status < 400) {
-        if (response?.data?.id) {
-          // navigate('/login');
+        if (response?.id) {
+          setMsg({ type: 'success', msg: 'Tourist successfully created' });
         }
       } else {
-        setIsCreateError(true);
+        setMsg({ type: 'warning', msg: 'Failed to create, please try again' });
       }
     } catch (error) {
       setIsLoading(false);
-      setIsCreateError(true);
+      setMsg({ type: 'warning', msg: 'Failed to create, please try again' });
     }
   };
 
+  useEffect(() => {
+    if (msg.type !== '') {
+      setTimeout(() => {
+        setMsg({ type: '', msg: '' });
+      }, 2000);
+    }
+  }, [msg]);
+
   return (
-    <Container className="px-2 py-24 h-auto md:px-4">
-      <Navbar />
-      <TouristsHeader
-        totalTourist={data.totalrecord}
-        handleOpenModal={handleOpenModal}
-      />
-      <TouristsTable currentPage={page} tourists={data.tourists} />
-      <Flexer className="mt-2 justify-center">
-        <Pagination
-          currentPage={page}
-          totalPage={data.total_pages}
-          handlePageChange={handlePageChange}
+    <>
+      <Container className="px-2 py-24 h-auto md:px-4">
+        <Navbar />
+        <TouristsHeader
+          totalTourist={data.totalrecord}
+          handleOpenModal={handleOpenModal}
         />
-      </Flexer>
-      {openModal && (
-        <Modal handleClose={handleCloseModal}>
-          <TouristsModal
-            email={email}
-            name={name}
-            location={location}
-            onEmailChange={onEmailChange}
-            onNameChange={onNameChange}
-            onLocationChange={onLocationChange}
-            isLoading={isLoading}
-            handleSubmit={handleCreateTourist}
+        <TouristsTable currentPage={page} tourists={data.tourists} />
+        <Flexer className="mt-2 justify-center">
+          <Pagination
+            currentPage={page}
+            totalPage={data.total_pages}
+            handlePageChange={handlePageChange}
           />
-        </Modal>
+        </Flexer>
+        {openModal && (
+          <Modal handleClose={handleCloseModal}>
+            <TouristsModal
+              email={email}
+              name={name}
+              location={location}
+              onEmailChange={onEmailChange}
+              onNameChange={onNameChange}
+              onLocationChange={onLocationChange}
+              isLoading={isLoading}
+              handleSubmit={handleCreateTourist}
+            />
+          </Modal>
+        )}
+      </Container>
+      {msg.type !== '' && (
+        <div className="absolute top-2 right-2 z-[60]">
+          <Toast type={msg.type}>{msg.msg}</Toast>
+        </div>
       )}
-    </Container>
+    </>
   );
 };
 

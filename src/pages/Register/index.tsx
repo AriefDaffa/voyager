@@ -1,13 +1,12 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import type { ChangeEvent, FC, SyntheticEvent } from 'react';
 
 import Container from '@/components/Container';
 import Flexer from '@/components/Flexer';
-import Alert from '@/components/Alert';
 import { register } from '@/repository/user/register';
 
 import RegisterForm from './RegisterForm';
+import Toast from '@/components/Toast';
 
 interface RegisterProps {}
 
@@ -16,9 +15,7 @@ const Register: FC<RegisterProps> = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoginErr, setIsLoginErr] = useState(false);
-
-  const navigate = useNavigate();
+  const [toastMsg, setToastMsg] = useState({ type: '', msg: '' });
 
   const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -34,7 +31,6 @@ const Register: FC<RegisterProps> = () => {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    setIsLoginErr(false);
     setIsLoading(true);
 
     try {
@@ -46,37 +42,53 @@ const Register: FC<RegisterProps> = () => {
 
       if (request.status >= 200 && request.status < 400) {
         if (response?.data?.id) {
-          navigate('/login');
+          setToastMsg({ type: 'success', msg: 'Account registered' });
         }
       } else {
-        setIsLoginErr(true);
+        setToastMsg({
+          type: 'warning',
+          msg: 'There is a problem, please try again',
+        });
       }
     } catch (error) {
       setIsLoading(false);
-      setIsLoginErr(true);
+      setToastMsg({
+        type: 'warning',
+        msg: 'There is a problem, please try again',
+      });
     }
   };
 
+  useEffect(() => {
+    if (toastMsg.type !== '') {
+      setTimeout(() => {
+        setToastMsg({ type: '', msg: '' });
+      }, 2000);
+    }
+  }, [toastMsg]);
+
   return (
-    <Container className="z-20">
-      <Flexer flexDirection="col" className="justify-center h-screen">
-        <RegisterForm
-          email={email}
-          name={name}
-          password={password}
-          onEmailChange={onEmailChange}
-          onNameChange={onNameChange}
-          onPassChange={onPassChange}
-          isLoading={isLoading}
-          handleSubmit={handleSubmit}
-        />
-        {isLoginErr && (
-          <div className="self-center w-full max-w-[500px] pt-4 ">
-            <Alert>There is a problem, please try again </Alert>
-          </div>
-        )}
-      </Flexer>
-    </Container>
+    <>
+      <Container className="z-20">
+        <Flexer flexDirection="col" className="justify-center h-screen">
+          <RegisterForm
+            email={email}
+            name={name}
+            password={password}
+            onEmailChange={onEmailChange}
+            onNameChange={onNameChange}
+            onPassChange={onPassChange}
+            isLoading={isLoading}
+            handleSubmit={handleSubmit}
+          />
+        </Flexer>
+      </Container>
+      {toastMsg.type !== '' && (
+        <div className="absolute top-2 right-2">
+          <Toast type={toastMsg.type}>{toastMsg.msg}</Toast>
+        </div>
+      )}
+    </>
   );
 };
 

@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { ChangeEvent, FC, SyntheticEvent } from 'react';
 
 import Container from '@/components/Container';
 import Flexer from '@/components/Flexer';
 import LoginForm from './LoginForm';
-import Alert from '@/components/Alert';
+import Toast from '@/components/Toast';
 import { login } from '@/repository/user/login';
 import { useUserContext } from '@/context/UserContext';
 
@@ -59,24 +59,34 @@ const Login: FC<LoginProps> = () => {
     }
   };
 
+  useEffect(() => {
+    if (isLoginErr) {
+      setTimeout(() => {
+        setIsLoginErr(false);
+      }, 2000);
+    }
+  }, [isLoginErr]);
+
   return (
-    <Container className="z-20">
-      <Flexer flexDirection="col" className="justify-center h-screen">
-        <LoginForm
-          isLoading={isLoading}
-          onEmailChange={onEmailChange}
-          onPassChange={onPassChange}
-          email={email}
-          password={password}
-          handleSubmit={handleSubmit}
-        />
-        {isLoginErr && (
-          <div className="self-center w-full max-w-[500px] pt-4 ">
-            <Alert>There is a problem, please try again</Alert>
-          </div>
-        )}
-      </Flexer>
-    </Container>
+    <>
+      <Container className="z-20">
+        <Flexer flexDirection="col" className="justify-center h-screen">
+          <LoginForm
+            isLoading={isLoading}
+            onEmailChange={onEmailChange}
+            onPassChange={onPassChange}
+            email={email}
+            password={password}
+            handleSubmit={handleSubmit}
+          />
+        </Flexer>
+      </Container>
+      {isLoginErr && (
+        <div className="absolute top-2 right-2">
+          <Toast type="warning">There is a problem, please try again</Toast>
+        </div>
+      )}
+    </>
   );
 };
 
