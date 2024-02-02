@@ -31,7 +31,7 @@ const Tourists: FC<TouristsProps> = () => {
   };
 
   return (
-    <Container className="px-2 h-screen pt-24 md:px-4">
+    <Container className="px-2 py-24 h-auto md:px-4">
       <Navbar />
       <TouristsHeader
         totalTourist={dummyTourists.totalrecord}
