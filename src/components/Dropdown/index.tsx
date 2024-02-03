@@ -8,6 +8,7 @@ interface DropdownProps extends HTMLProps<HTMLDivElement> {
 }
 
 const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(({ menu }, ref) => {
+  console.log(menu);
   return (
     <div
       ref={ref}
@@ -17,10 +18,14 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(({ menu }, ref) => {
       {menu.map((item) => (
         <div
           key={item.id}
-          className="font-medium px-2 py-1 rounded-md hover:bg-gray-200"
+          className={`flex gap-1 items-center font-medium px-2 py-1 rounded-md  ${
+            item.buttonType === 'warning'
+              ? 'border text-red-600 border-red-600 hover:bg-red-600 hover:text-white'
+              : 'hover:bg-gray-200'
+          }`}
           onClick={item.onClick}
         >
-          {item.name}
+          {item.Icon} {item.name}
         </div>
       ))}
     </div>

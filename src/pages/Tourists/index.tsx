@@ -36,6 +36,27 @@ const Tourists: FC<TouristsProps> = () => {
 
   const { user } = useUserContext();
 
+  const handlePageChange = (val: number) => {
+    setPage(val);
+  };
+
+  const handleEditVal = ({ email, name, location, id }: EditValArgs) => {
+    setPayload({ email, name, location, id });
+  };
+
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setPayload((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const clearPayload = () => {
+    setPayload({
+      email: '',
+      name: '',
+      location: '',
+      id: '',
+    });
+  };
+
   // get all tourists
   const {
     data,
@@ -63,6 +84,7 @@ const Tourists: FC<TouristsProps> = () => {
     refetch,
     token: user.Token,
     setMsg,
+    clearPayload,
   });
 
   // Update tourist
@@ -82,6 +104,7 @@ const Tourists: FC<TouristsProps> = () => {
     refetch,
     token: user.Token,
     setMsg,
+    clearPayload,
   });
 
   // Create tourist
@@ -101,18 +124,6 @@ const Tourists: FC<TouristsProps> = () => {
     token: user.Token,
     setMsg,
   });
-
-  const handlePageChange = (val: number) => {
-    setPage(val);
-  };
-
-  const handleEditVal = ({ email, name, location, id }: EditValArgs) => {
-    setPayload({ email, name, location, id });
-  };
-
-  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setPayload((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
 
   useEffect(() => {
     if (msg.type !== '') {

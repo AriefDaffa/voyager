@@ -7,7 +7,7 @@ import type { UseUpdateTouristResponse, useUpdateTouristProps } from './types';
 const useUpdateTourist = (
   props: useUpdateTouristProps
 ): UseUpdateTouristResponse => {
-  const { payload, token, id, setMsg, refetch } = props;
+  const { payload, token, id, setMsg, refetch, clearPayload } = props;
 
   const [isLoading, setIsLoading] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
@@ -16,9 +16,10 @@ const useUpdateTourist = (
     setUpdateModal(true);
   };
 
-  const handleCloseUpdate = () => {
+  const handleCloseUpdate = useCallback(() => {
     setUpdateModal(false);
-  };
+    clearPayload();
+  }, [clearPayload]);
 
   const handleUpdateTourist = useCallback(
     async (e: SyntheticEvent) => {
@@ -55,10 +56,13 @@ const useUpdateTourist = (
       } catch (error) {
         setIsLoading(false);
         setUpdateModal(false);
+        clearPayload();
         setMsg({ type: 'warning', msg: 'Failed to delete, please try again' });
       }
     },
     [
+      clearPayload,
+      handleCloseUpdate,
       id,
       payload.tourist_email,
       payload.tourist_location,
@@ -77,7 +81,7 @@ const useUpdateTourist = (
       handleCloseUpdate,
       isModalOpen: updateModal,
     };
-  }, [handleUpdateTourist, isLoading, updateModal]);
+  }, [handleCloseUpdate, handleUpdateTourist, isLoading, updateModal]);
 };
 
 export default useUpdateTourist;

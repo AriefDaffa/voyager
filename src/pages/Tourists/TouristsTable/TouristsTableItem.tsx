@@ -1,5 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { BsThreeDotsVertical } from 'react-icons/bs';
+import { MdEditSquare } from 'react-icons/md';
+import { MdDelete } from 'react-icons/md';
+
 import { useCallback, useMemo, useState } from 'react';
 import { useClickOutside } from '@mantine/hooks';
 import type { FC, MouseEvent } from 'react';
@@ -63,11 +66,15 @@ const TouristsTableItem: FC<TouristsTableItemProps> = ({
       {
         id: 1,
         name: <div>Edit</div>,
+        buttonType: '',
+        Icon: <MdEditSquare />,
         onClick: () => handleDropdownClick('edit'),
       },
       {
         id: 2,
         name: <div>Delete</div>,
+        buttonType: 'warning',
+        Icon: <MdDelete />,
         onClick: () => handleDropdownClick('delete'),
       },
     ],

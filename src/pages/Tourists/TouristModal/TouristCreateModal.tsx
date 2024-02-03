@@ -24,7 +24,7 @@ const TouristCreateModal: FC<TouristCreateModalProps> = ({
   return (
     <form onSubmit={handleSubmit} className="px-2">
       <div className="text-center font-semibold text-xl">
-        Edit existing Tourist
+        Create new Tourist
       </div>
       <Input
         id="name"

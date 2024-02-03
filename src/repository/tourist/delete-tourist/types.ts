@@ -17,6 +17,7 @@ export interface useDeleteTouristProps {
     }>
   >;
   refetch: () => void;
+  clearPayload: () => void;
 }
 
 export interface UseDeleteTouristResponse {

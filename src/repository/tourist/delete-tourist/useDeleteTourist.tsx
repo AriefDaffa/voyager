@@ -6,7 +6,7 @@ import type { UseDeleteTouristResponse, useDeleteTouristProps } from './types';
 const useDeleteTourist = (
   props: useDeleteTouristProps
 ): UseDeleteTouristResponse => {
-  const { payload, token, id, setMsg, refetch } = props;
+  const { payload, token, id, setMsg, refetch, clearPayload } = props;
 
   const [isLoading, setIsLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -15,9 +15,10 @@ const useDeleteTourist = (
     setDeleteModal(true);
   };
 
-  const handleCloseDelete = () => {
+  const handleCloseDelete = useCallback(() => {
     setDeleteModal(false);
-  };
+    clearPayload();
+  }, [clearPayload]);
 
   const handleDeleteTourist = useCallback(async () => {
     try {
@@ -39,6 +40,7 @@ const useDeleteTourist = (
       if (request.status >= 200 && request.status < 400) {
         if (response?.id) {
           setMsg({ type: 'success', msg: 'Tourist deleted successfully ' });
+          handleCloseDelete();
           refetch();
         }
       } else {
@@ -50,9 +52,12 @@ const useDeleteTourist = (
     } catch (error) {
       setIsLoading(false);
       setDeleteModal(false);
+      clearPayload();
       setMsg({ type: 'warning', msg: 'Failed to delete, please try again' });
     }
   }, [
+    clearPayload,
+    handleCloseDelete,
     id,
     payload.tourist_email,
     payload.tourist_location,
@@ -70,7 +75,7 @@ const useDeleteTourist = (
       handleCloseDelete,
       isModalOpen: deleteModal,
     };
-  }, [deleteModal, handleDeleteTourist, isLoading]);
+  }, [deleteModal, handleCloseDelete, handleDeleteTourist, isLoading]);
 };
 
 export default useDeleteTourist;
