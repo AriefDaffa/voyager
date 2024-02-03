@@ -38,7 +38,11 @@ const Tourists: FC<TouristsProps> = () => {
 
   const { user } = useUserContext();
 
-  const { data, isLoading: isTouristFetching } = useGetListTourist({
+  const {
+    data,
+    isLoading: isTouristFetching,
+    refetch,
+  } = useGetListTourist({
     token: user.Token,
     page,
   });
@@ -97,6 +101,8 @@ const Tourists: FC<TouristsProps> = () => {
         if (request.status >= 200 && request.status < 400) {
           if (response?.id) {
             setMsg({ type: 'success', msg: 'Tourist updated successfully ' });
+            handleCloseModal();
+            refetch();
           }
         } else {
           setMsg({
@@ -121,6 +127,8 @@ const Tourists: FC<TouristsProps> = () => {
         if (request.status >= 200 && request.status < 400) {
           if (response?.id) {
             setMsg({ type: 'success', msg: 'Tourist created successfully ' });
+            handleCloseModal();
+            refetch();
           }
         } else {
           setMsg({
@@ -173,6 +181,7 @@ const Tourists: FC<TouristsProps> = () => {
       if (request.status >= 200 && request.status < 400) {
         if (response?.id) {
           setMsg({ type: 'success', msg: 'Tourist deleted successfully ' });
+          refetch();
         }
       } else {
         setMsg({

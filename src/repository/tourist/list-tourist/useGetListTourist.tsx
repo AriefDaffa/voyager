@@ -62,8 +62,8 @@ const useGetListTourist = ({
   }, [fetchListTourist]);
 
   return useMemo(() => {
-    return { data, isLoading, isError };
-  }, [data, isError, isLoading]);
+    return { data, isLoading, isError, refetch: fetchListTourist };
+  }, [data, fetchListTourist, isError, isLoading]);
 };
 
 export default useGetListTourist;

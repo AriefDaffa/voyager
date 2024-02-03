@@ -24,5 +24,6 @@ export interface UseGetListTouristProps {
 export interface UseGetListTouristResponse {
   isLoading: boolean;
   isError: boolean;
+  refetch: () => void;
   data: ListTouristResponse;
 }
