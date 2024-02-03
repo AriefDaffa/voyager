@@ -8,7 +8,6 @@ interface DropdownProps extends HTMLProps<HTMLDivElement> {
 }
 
 const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(({ menu }, ref) => {
-  console.log(menu);
   return (
     <div
       ref={ref}
