@@ -21,7 +21,7 @@ const TouristsTable: FC<TouristsTableProps> = ({
 }) => {
   return (
     <div className="">
-      <table className="table-auto w-full border-collapse ">
+      <table className=" w-full border-collapse md:table-auto">
         <TouristsTableHead />
         <tbody>
           {tourists.map((item, idx) => (
