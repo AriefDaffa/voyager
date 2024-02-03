@@ -20,8 +20,8 @@ const TouristsTable: FC<TouristsTableProps> = ({
   handleOpenDelete,
 }) => {
   return (
-    <div className="">
-      <table className=" w-full border-collapse md:table-auto">
+    <div className="overflow-x-auto md:overflow-x-visible">
+      <table className="w-full border-collapse table-auto">
         <TouristsTableHead />
         <tbody>
           {tourists.map((item, idx) => (

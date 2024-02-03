@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useClickOutside } from '@mantine/hooks';
 import type { FC, MouseEvent } from 'react';
 
@@ -33,44 +33,45 @@ const TouristsTableItem: FC<TouristsTableItemProps> = ({
 
   const ref = useClickOutside(() => setOpenDropdown(false));
 
+  const handleDropdownClick = useCallback(
+    (type: 'delete' | 'edit') => {
+      if (type === 'delete') {
+        handleOpenDelete();
+      } else {
+        handleOpenModal();
+      }
+      handleEditVal({
+        email: tourist_email,
+        name: tourist_name,
+        location: tourist_location,
+        id,
+      });
+    },
+    [
+      id,
+      handleEditVal,
+      handleOpenDelete,
+      handleOpenModal,
+      tourist_email,
+      tourist_location,
+      tourist_name,
+    ]
+  );
+
   const dropdownMenu = useMemo(
     () => [
       {
         id: 1,
         name: <div>Edit</div>,
-        onClick: () => {
-          handleOpenModal();
-          handleEditVal({
-            email: tourist_email,
-            name: tourist_name,
-            location: tourist_location,
-            id,
-          });
-        },
+        onClick: () => handleDropdownClick('edit'),
       },
       {
         id: 2,
         name: <div>Delete</div>,
-        onClick: () => {
-          handleOpenDelete();
-          handleEditVal({
-            email: tourist_email,
-            name: tourist_name,
-            location: tourist_location,
-            id,
-          });
-        },
+        onClick: () => handleDropdownClick('delete'),
       },
     ],
-    [
-      handleEditVal,
-      handleOpenDelete,
-      handleOpenModal,
-      id,
-      tourist_email,
-      tourist_location,
-      tourist_name,
-    ]
+    [handleDropdownClick]
   );
 
   const handleThreedots = (e: MouseEvent<HTMLDivElement>) => {
@@ -108,7 +109,7 @@ const TouristsTableItem: FC<TouristsTableItemProps> = ({
       </td>
       <td className="py-4 px-3 border border-l-0 border-gray-300">
         <div
-          className="relative w-min rounded-lg p-2 float-right hover:bg-gray-300"
+          className=" w-min rounded-lg p-2 float-right hover:bg-gray-300 md:relative"
           onClick={handleThreedots}
         >
           <BsThreeDotsVertical
