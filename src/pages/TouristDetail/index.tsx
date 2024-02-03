@@ -44,7 +44,7 @@ const TouristDetail: FC<TouristDetailProps> = () => {
           <div className="font-medium">Back</div>
         </Flexer>
       </div>
-      <Flexer className="justify-center gap-4 items-center">
+      <Flexer className="justify-center gap-4 items-center mt-4">
         <Flexer
           flexDirection="col"
           className="bg-white p-2 rounded-lg relative gap-2 items-center md:w-3/4"
