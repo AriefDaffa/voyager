@@ -53,6 +53,7 @@ const useLogin = (props: LoginPayload): UseLoginResponse => {
           });
         }
       } catch (error) {
+        setIsLoading(false);
         setMsg({
           type: 'warning',
           msg: 'Login failed, please try again',
