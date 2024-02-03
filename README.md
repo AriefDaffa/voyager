@@ -1,7 +1,7 @@
 # Voyager
 
 ### What is Voyager?
-"Voyager" is a word that, when translated into French, means "Adventurer" or "Explorer." By using Voyager, users can perform management processes on tourists registered in the system. Users can view, modify, and also delete tourist lists in the system. This system can also be used on any device as long as they have an internet connection.
+"Voyager" is a word that, when translated into French, means "Travels" or "Explore". By using Voyager, users can perform management processes on tourists registered in the system. Users can view, modify, and also delete tourist lists in the system. This system can also be used on any device as long as they have an internet connection.
 
 ### Features
 - Delete Tourist
