@@ -3,9 +3,10 @@ import type { ChangeEvent, FC } from 'react';
 
 import Container from '@/components/Container';
 import Flexer from '@/components/Flexer';
-import LoginForm from './LoginForm';
 import Toast from '@/components/Toast';
+import AnimationWrapper from '@/components/AnimationWrapper';
 import useLogin from '@/repository/user/login/useLogin';
+import LoginForm from './LoginForm';
 
 interface LoginProps {}
 
@@ -22,7 +23,7 @@ const Login: FC<LoginProps> = () => {
   });
 
   return (
-    <>
+    <AnimationWrapper>
       <Container className="z-20">
         <Flexer flexDirection="col" className="justify-center h-screen">
           <LoginForm
@@ -39,7 +40,7 @@ const Login: FC<LoginProps> = () => {
           <Toast type={msg.type}>{msg.msg}</Toast>
         </div>
       )}
-    </>
+    </AnimationWrapper>
   );
 };
 

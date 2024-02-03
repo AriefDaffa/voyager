@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import type { ChangeEvent, FC } from 'react';
 
+import Toast from '@/components/Toast';
 import Container from '@/components/Container';
 import Flexer from '@/components/Flexer';
+import AnimationWrapper from '@/components/AnimationWrapper';
+import useRegister from '@/repository/user/register/useRegister';
 
 import RegisterForm from './RegisterForm';
-import Toast from '@/components/Toast';
-import useRegister from '@/repository/user/register/useRegister';
 
 interface RegisterProps {}
 
@@ -24,7 +25,7 @@ const Register: FC<RegisterProps> = () => {
   });
 
   return (
-    <>
+    <AnimationWrapper>
       <Container className="z-20">
         <Flexer flexDirection="col" className="justify-center h-screen">
           <RegisterForm
@@ -42,7 +43,7 @@ const Register: FC<RegisterProps> = () => {
           <Toast type={msg.type}>{msg.msg}</Toast>
         </div>
       )}
-    </>
+    </AnimationWrapper>
   );
 };
 

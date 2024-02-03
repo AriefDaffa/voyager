@@ -7,6 +7,7 @@ import Pagination from '@/components/Pagination';
 import Flexer from '@/components/Flexer';
 import Modal from '@/components/Modal';
 import Toast from '@/components/Toast';
+import AnimationWrapper from '@/components/AnimationWrapper';
 import useGetListTourist from '@/repository/tourist/list-tourist/useGetListTourist';
 import useDeleteTourist from '@/repository/tourist/delete-tourist/useDeleteTourist';
 import useUpdateTourist from '@/repository/tourist/update-tourist/useUpdateTourist';
@@ -122,7 +123,7 @@ const Tourists: FC<TouristsProps> = () => {
   }, [msg]);
 
   return (
-    <>
+    <AnimationWrapper>
       <Container className="px-2 py-24 h-auto md:px-4">
         <Navbar />
         <TouristsHeader
@@ -184,7 +185,7 @@ const Tourists: FC<TouristsProps> = () => {
           <Toast type={msg.type}>{msg.msg}</Toast>
         </div>
       )}
-    </>
+    </AnimationWrapper>
   );
 };
 
