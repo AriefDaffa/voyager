@@ -21,7 +21,7 @@ const useGetTouristDetail = ({
   id,
   token,
 }: UseGetDetailTouristProps): UseGetDetailTouristResponse => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [data, setData] = useState<DetailTouristResponse>(defaultValue);
 

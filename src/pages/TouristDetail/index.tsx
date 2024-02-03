@@ -10,6 +10,7 @@ import Navbar from '@/components/Navbar';
 import Flexer from '@/components/Flexer';
 import useGetTouristDetail from '@/repository/tourist/detail-tourist/useGetTouristDetail';
 import { useUserContext } from '@/context/UserContext';
+import Skeleton from '@/components/Skeleton';
 
 interface TouristDetailProps {}
 
@@ -20,7 +21,7 @@ const TouristDetail: FC<TouristDetailProps> = () => {
 
   const id = params?.id || '';
 
-  const { data } = useGetTouristDetail({
+  const { data, isLoading } = useGetTouristDetail({
     id,
     token: user.Token,
   });
@@ -42,93 +43,44 @@ const TouristDetail: FC<TouristDetailProps> = () => {
           flexDirection="col"
           className="bg-white p-2 rounded-lg relative gap-2 items-center md:w-3/4"
         >
-          <div className="h-full w-64">
-            <img
-              src={data.tourist_profilepicture}
-              alt=""
-              className="rounded-lg w-full h-full object-cover"
-            />
+          <div className="h-64 w-64">
+            {!isLoading ? (
+              <img
+                src={data.tourist_profilepicture}
+                alt=""
+                className="rounded-lg w-full h-full object-cover"
+              />
+            ) : (
+              <Skeleton className="w-full h-full" />
+            )}
           </div>
           <div className="text-center py-4">
-            <div className="text-xs text-gray-500">{data.id}</div>
+            <div className="text-xs text-gray-500">
+              {data.id || <Skeleton className="h-4 " />}
+            </div>
             <div className="font-semibold text-4xl py-2">
-              {data.tourist_name}
+              {data.tourist_name || <Skeleton className="h-8" />}
             </div>
             <Flexer className="gap-2 flex-col w-full items-center md:flex-row">
               <Flexer className="text-sm text-gray-500 items-center gap-1">
                 <span>
                   <IoMdMail />
                 </span>
-                {data.tourist_email}
+
+                {data.tourist_email || (
+                  <Skeleton className="h-4 w-60 md:w-44" />
+                )}
               </Flexer>
               <Flexer className="text-sm text-gray-500 items-center gap-1">
                 <span>
                   <FaLocationDot />
                 </span>
-                {data.tourist_location}
+                {data.tourist_location || (
+                  <Skeleton className="h-4 w-60 md:w-44" />
+                )}
               </Flexer>
             </Flexer>
           </div>
-          {/* <Flexer className="justify-center">
-            <div className="h-full w-64">
-              <img
-                src={data.tourist_profilepicture}
-                alt=""
-                className="rounded-lg w-full h-full object-cover"
-              />
-            </div>
-          </Flexer> */}
-          {/* <Flexer flexDirection="col" className="justify-between w-full">
-            <Flexer flexDirection="col" className="gap-1 w-full">
-              <label className="text-sm text-gray-500">Name</label>
-              {activateUpdate ? (
-                <input
-                  className="p-2 outline-none border border-[#dadada] rounded-md"
-                  type="text"
-                  defaultValue={data.tourist_name}
-                />
-              ) : (
-                <div className="font-bold text-xl md:text-2xl lg:text-3xl">
-                  {data.tourist_name}
-                </div>
-              )}
-            </Flexer>
-            <Flexer flexDirection="col" className="gap-1 w-full">
-              <label className="text-sm text-gray-500">Email</label>
-              {activateUpdate ? (
-                <input
-                  className="p-2 outline-none border border-[#dadada] rounded-md"
-                  type="email"
-                  defaultValue={data.tourist_email}
-                />
-              ) : (
-                <div className="font-bold text-xl md:text-2xl lg:text-3xl">
-                  {data.tourist_email}
-                </div>
-              )}
-            </Flexer>
-            <Flexer flexDirection="col" className="gap-1 w-full">
-              <label className="text-sm text-gray-500">Location</label>
-              {activateUpdate ? (
-                <input
-                  className="p-2 outline-none border border-[#dadada] rounded-md"
-                  type="text"
-                  defaultValue={data.tourist_location}
-                />
-              ) : (
-                <div className="font-bold text-xl md:text-2xl lg:text-3xl">
-                  {data.tourist_location}
-                </div>
-              )}
-            </Flexer>
-            <Flexer className="mt-4 gap-2">
-              <Button
-                text={activateUpdate ? 'Cancel' : 'Edit Tourist'}
-                onClick={updateMode}
-              />
-              {activateUpdate && <Button text="Submit" onClick={updateMode} />}
-            </Flexer>
-          </Flexer> */}
         </Flexer>
       </Flexer>
     </Container>

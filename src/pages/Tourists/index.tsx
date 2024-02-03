@@ -38,7 +38,10 @@ const Tourists: FC<TouristsProps> = () => {
 
   const { user } = useUserContext();
 
-  const { data } = useGetListTourist({ token: user.Token, page });
+  const { data, isLoading: isTouristFetching } = useGetListTourist({
+    token: user.Token,
+    page,
+  });
 
   const handlePageChange = (val: number) => {
     setPage(val);
@@ -202,6 +205,7 @@ const Tourists: FC<TouristsProps> = () => {
         />
         <TouristsTable
           currentPage={page}
+          isLoading={isTouristFetching}
           tourists={data.tourists}
           handleEditVal={handleEditVal}
           handleOpenModal={handleOpenModal}
