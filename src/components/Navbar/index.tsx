@@ -19,8 +19,8 @@ const Navbar: FC<NavbarProps> = () => {
 
   return (
     <nav className="bg-white fixed w-full z-40 top-0 start-0  border-gray-200">
-      <div className="max-w-6xl flex justify-between flex-wrap items-center  mx-auto">
-        <div className="items-center w-full md:flex md:w-auto md:order-1">
+      <div className="max-w-6xl flex justify-between flex-wrap items-center mx-auto">
+        <div className="items-center w-full flex overflow-auto md:w-auto md:order-1">
           <ul className="flex font-medium  rounded-lg">
             {navMenu.map((item) => (
               <NavLink
@@ -36,8 +36,18 @@ const Navbar: FC<NavbarProps> = () => {
               </NavLink>
             ))}
           </ul>
+          <div className="items-center w-full flex md:hidden md:w-auto md:order-1">
+            <ul className="flex font-medium  rounded-lg mx-2">
+              <button
+                className="bg-red-600 py-1 px-3 rounded-lg text-white hover:bg-red-700"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </ul>
+          </div>
         </div>
-        <div className="items-center w-full md:flex md:w-auto md:order-1">
+        <div className="items-center w-full hidden md:flex md:w-auto md:order-1">
           <ul className="flex font-medium  rounded-lg mx-2">
             <button
               className="bg-red-600 py-1 px-3 rounded-lg text-white hover:bg-red-700"
