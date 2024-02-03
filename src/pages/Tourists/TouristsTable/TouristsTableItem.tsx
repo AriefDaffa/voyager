@@ -101,7 +101,7 @@ const TouristsTableItem: FC<TouristsTableItemProps> = ({
               className="w-full h-full rounded-full"
             />
           </div>
-          <div className="font-bold">{tourist_name}</div>
+          <div className="font-bold w-max md:w-auto">{tourist_name}</div>
         </Flexer>
       </td>
       <td className="py-4 px-3 border border-gray-300">
