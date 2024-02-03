@@ -65,7 +65,7 @@ const Pagination: FC<PaginationProps> = ({
               ? 'bg-primary text-white'
               : 'bg-white cursor-pointer'
           } hover:bg-primary hover:text-white`}
-          onClick={handleClickPrev}
+          onClick={currentPage === 1 ? () => {} : () => handleClickPrev()}
         >
           <FaAngleLeft size={14} />
         </li>
@@ -97,7 +97,9 @@ const Pagination: FC<PaginationProps> = ({
               ? 'bg-primary text-white'
               : 'bg-white cursor-pointer'
           } hover:bg-primary hover:text-white `}
-          onClick={handleClickNext}
+          onClick={
+            currentPage === totalPage ? () => {} : () => handleClickNext()
+          }
         >
           <FaAngleRight size={14} />
         </li>

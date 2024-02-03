@@ -9,7 +9,7 @@ interface TouristsTableProps {
   currentPage: number;
   isLoading: boolean;
   tourists: Tourists[];
-  handleOpenModal: () => void;
+  handleOpenUpdate: () => void;
   handleOpenDelete: () => void;
   handleEditVal: (val: EditValArgs) => void;
 }
@@ -19,7 +19,7 @@ const TouristsTable: FC<TouristsTableProps> = ({
   isLoading,
   currentPage,
   handleEditVal,
-  handleOpenModal,
+  handleOpenUpdate,
   handleOpenDelete,
 }) => {
   return (
@@ -34,7 +34,7 @@ const TouristsTable: FC<TouristsTableProps> = ({
                   {...item}
                   index={currentPage > 1 ? (currentPage - 1) * 10 + idx : idx}
                   handleEditVal={handleEditVal}
-                  handleOpenModal={handleOpenModal}
+                  handleOpenUpdate={handleOpenUpdate}
                   handleOpenDelete={handleOpenDelete}
                 />
               ))

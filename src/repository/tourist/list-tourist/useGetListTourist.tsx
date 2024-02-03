@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { logout } from '@/utils/logout';
+
 import { listTourist } from '.';
 import type {
   ListTouristResponse,
@@ -47,6 +49,10 @@ const useGetListTourist = ({
         if (resp?.page) {
           setData({ ...resp, tourists: resp?.data });
         }
+      } else if (req.status === 401) {
+        logout();
+      } else if (req.status === 404) {
+        window.location.href = '/tourists';
       } else {
         setIsError(true);
       }

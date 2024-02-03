@@ -3,14 +3,14 @@ import { FaLocationDot } from 'react-icons/fa6';
 import { IoMdMail } from 'react-icons/io';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import type { FC } from 'react';
+import { useEffect, type FC } from 'react';
 
 import Container from '@/components/Container';
 import Navbar from '@/components/Navbar';
 import Flexer from '@/components/Flexer';
 import useGetTouristDetail from '@/repository/tourist/detail-tourist/useGetTouristDetail';
-import { useUserContext } from '@/context/UserContext';
 import Skeleton from '@/components/Skeleton';
+import { useUserContext } from '@/context/UserContext';
 
 interface TouristDetailProps {}
 
@@ -21,10 +21,16 @@ const TouristDetail: FC<TouristDetailProps> = () => {
 
   const id = params?.id || '';
 
-  const { data, isLoading } = useGetTouristDetail({
+  const { data, isLoading, isError } = useGetTouristDetail({
     id,
     token: user.Token,
   });
+
+  useEffect(() => {
+    if (isError && !isLoading) {
+      navigate('/not-found');
+    }
+  }, [isError, isLoading, navigate]);
 
   return (
     <Container className="px-2 h-screen pt-24 md:px-4">

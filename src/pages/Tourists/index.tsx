@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { ChangeEvent, FC, SyntheticEvent } from 'react';
+import type { ChangeEvent, FC } from 'react';
 
 import Container from '@/components/Container';
 import Navbar from '@/components/Navbar';
@@ -8,21 +8,21 @@ import Flexer from '@/components/Flexer';
 import Modal from '@/components/Modal';
 import Toast from '@/components/Toast';
 import useGetListTourist from '@/repository/tourist/list-tourist/useGetListTourist';
+import useDeleteTourist from '@/repository/tourist/delete-tourist/useDeleteTourist';
+import useUpdateTourist from '@/repository/tourist/update-tourist/useUpdateTourist';
+import useCreateTourist from '@/repository/tourist/create-tourist/useCreateTourist';
 import { useUserContext } from '@/context/UserContext';
-import { updateTourist } from '@/repository/tourist/update-tourist';
-import { createTourist } from '@/repository/tourist/create-tourist';
-import { deleteTourist } from '@/repository/tourist/delete-tourist';
 
 import TouristsHeader from './TouristsHeader';
 import TouristsTable from './TouristsTable';
-import TouristsModal from './TouristsModal';
-import TouristDeleteModal from './TouristDeleteModal';
+import TouristDeleteModal from './TouristModal/TouristDeleteModal';
+import TouristUpdateModal from './TouristModal/TouristUpdateModal';
+import TouristCreateModal from './TouristModal/TouristCreateModal';
 import type { EditValArgs } from './types';
 
 interface TouristsProps {}
 
 const Tourists: FC<TouristsProps> = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [msg, setMsg] = useState({ type: '', msg: '' });
   const [payload, setPayload] = useState({
     email: '',
@@ -32,12 +32,10 @@ const Tourists: FC<TouristsProps> = () => {
   });
 
   const [page, setPage] = useState(1);
-  const [openModal, setOpenModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [editMode, setEditMode] = useState(false);
 
   const { user } = useUserContext();
 
+  // get all tourists
   const {
     data,
     isLoading: isTouristFetching,
@@ -47,153 +45,72 @@ const Tourists: FC<TouristsProps> = () => {
     page,
   });
 
+  //delete tourist
+  const {
+    handleCloseDelete,
+    handleDeleteTourist,
+    handleOpenDelete,
+    isLoading: isDeleting,
+    isModalOpen: isDeleteModalOpen,
+  } = useDeleteTourist({
+    id: payload.id,
+    payload: {
+      tourist_email: payload.email,
+      tourist_location: payload.location,
+      tourist_name: payload.name,
+    },
+    refetch,
+    token: user.Token,
+    setMsg,
+  });
+
+  // Update tourist
+  const {
+    handleCloseUpdate,
+    handleOpenUpdate,
+    handleUpdateTourist,
+    isLoading: isUpdating,
+    isModalOpen: isUpdateModalOpen,
+  } = useUpdateTourist({
+    id: payload.id,
+    payload: {
+      tourist_email: payload.email,
+      tourist_location: payload.location,
+      tourist_name: payload.name,
+    },
+    refetch,
+    token: user.Token,
+    setMsg,
+  });
+
+  // Create tourist
+  const {
+    handleCloseCreate,
+    handleCreateTourist,
+    handleOpenCreate,
+    isLoading: isCreating,
+    isModalOpen: isCreateModalOpen,
+  } = useCreateTourist({
+    payload: {
+      tourist_email: payload.email,
+      tourist_location: payload.location,
+      tourist_name: payload.name,
+    },
+    refetch,
+    token: user.Token,
+    setMsg,
+  });
+
   const handlePageChange = (val: number) => {
     setPage(val);
   };
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
-
-    if (editMode) {
-      setPayload({ email: '', name: '', location: '', id: '' });
-      setEditMode(false);
-    }
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-
-    if (editMode) {
-      setPayload({ email: '', name: '', location: '', id: '' });
-      setEditMode(false);
-    }
-  };
-
   const handleEditVal = ({ email, name, location, id }: EditValArgs) => {
-    setEditMode(true);
     setPayload({ email, name, location, id });
   };
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setPayload((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleCreateTourist = async (e: SyntheticEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      if (editMode) {
-        const request = await updateTourist(
-          {
-            tourist_email: payload.email,
-            tourist_location: payload.location,
-            tourist_name: payload.name,
-          },
-          payload.id,
-          user.Token
-        );
-
-        const response = await request.json();
-
-        setIsLoading(false);
-
-        if (request.status >= 200 && request.status < 400) {
-          if (response?.id) {
-            setMsg({ type: 'success', msg: 'Tourist updated successfully ' });
-            handleCloseModal();
-            refetch();
-          }
-        } else {
-          setMsg({
-            type: 'warning',
-            msg: 'Failed to update, please try again',
-          });
-        }
-      } else {
-        const request = await createTourist(
-          {
-            tourist_email: payload.email,
-            tourist_location: payload.location,
-            tourist_name: payload.name,
-          },
-          user.Token
-        );
-
-        const response = await request.json();
-
-        setIsLoading(false);
-
-        if (request.status >= 200 && request.status < 400) {
-          if (response?.id) {
-            setMsg({ type: 'success', msg: 'Tourist created successfully ' });
-            handleCloseModal();
-            refetch();
-          }
-        } else {
-          setMsg({
-            type: 'warning',
-            msg: 'Failed to create, please try again',
-          });
-        }
-      }
-    } catch (error) {
-      setIsLoading(false);
-      setMsg({ type: 'warning', msg: 'Failed to create, please try again' });
-    }
-  };
-
-  const handleOpenDelete = () => {
-    setDeleteModal(true);
-
-    if (editMode) {
-      setPayload({ email: '', name: '', location: '', id: '' });
-      setEditMode(false);
-    }
-  };
-
-  const handleCloseDelete = () => {
-    setDeleteModal(false);
-
-    if (editMode) {
-      setPayload({ email: '', name: '', location: '', id: '' });
-      setEditMode(false);
-    }
-  };
-
-  const handleDeleteTourist = async () => {
-    try {
-      const request = await deleteTourist(
-        {
-          tourist_email: payload.email,
-          tourist_location: payload.location,
-          tourist_name: payload.name,
-        },
-        payload.id,
-        user.Token
-      );
-
-      const response = await request.json();
-
-      setIsLoading(false);
-      setDeleteModal(false);
-
-      if (request.status >= 200 && request.status < 400) {
-        if (response?.id) {
-          setMsg({ type: 'success', msg: 'Tourist deleted successfully ' });
-          refetch();
-        }
-      } else {
-        setMsg({
-          type: 'warning',
-          msg: 'Failed to update, please try again',
-        });
-      }
-    } catch (error) {
-      setIsLoading(false);
-      setDeleteModal(false);
-      setMsg({ type: 'warning', msg: 'Failed to delete, please try again' });
-    }
   };
 
   useEffect(() => {
@@ -210,14 +127,14 @@ const Tourists: FC<TouristsProps> = () => {
         <Navbar />
         <TouristsHeader
           totalTourist={data.totalrecord}
-          handleOpenModal={handleOpenModal}
+          handleOpenModal={handleOpenCreate}
         />
         <TouristsTable
           currentPage={page}
           isLoading={isTouristFetching}
           tourists={data.tourists}
           handleEditVal={handleEditVal}
-          handleOpenModal={handleOpenModal}
+          handleOpenUpdate={handleOpenUpdate}
           handleOpenDelete={handleOpenDelete}
         />
         <Flexer className="mt-2 justify-center">
@@ -228,25 +145,36 @@ const Tourists: FC<TouristsProps> = () => {
           />
         </Flexer>
       </Container>
-      {openModal && (
-        <Modal handleClose={handleCloseModal}>
-          <TouristsModal
+      {isCreateModalOpen && (
+        <Modal handleClose={handleCloseCreate}>
+          <TouristCreateModal
             name={payload.name}
             email={payload.email}
             location={payload.location}
-            editMode={editMode}
-            isLoading={isLoading}
+            isLoading={isCreating}
             handleChange={onChangeHandler}
             handleSubmit={handleCreateTourist}
           />
         </Modal>
       )}
-      {deleteModal && (
+      {isUpdateModalOpen && (
+        <Modal handleClose={handleCloseUpdate}>
+          <TouristUpdateModal
+            name={payload.name}
+            email={payload.email}
+            location={payload.location}
+            isLoading={isUpdating}
+            handleChange={onChangeHandler}
+            handleSubmit={handleUpdateTourist}
+          />
+        </Modal>
+      )}
+      {isDeleteModalOpen && (
         <Modal handleClose={handleCloseDelete}>
           <TouristDeleteModal
             name={payload.name}
             email={payload.email}
-            isLoading={isLoading}
+            isLoading={isDeleting}
             handleSubmit={handleDeleteTourist}
           />
         </Modal>

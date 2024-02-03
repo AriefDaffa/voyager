@@ -12,7 +12,7 @@ import { EditValArgs, Tourists } from '../types';
 interface TouristsTableItemProps extends Tourists {
   index: number;
   handleEditVal: (val: EditValArgs) => void;
-  handleOpenModal: () => void;
+  handleOpenUpdate: () => void;
   handleOpenDelete: () => void;
 }
 
@@ -24,7 +24,7 @@ const TouristsTableItem: FC<TouristsTableItemProps> = ({
   tourist_email,
   tourist_name,
   handleEditVal,
-  handleOpenModal,
+  handleOpenUpdate,
   handleOpenDelete,
 }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -38,7 +38,7 @@ const TouristsTableItem: FC<TouristsTableItemProps> = ({
       if (type === 'delete') {
         handleOpenDelete();
       } else {
-        handleOpenModal();
+        handleOpenUpdate();
       }
       handleEditVal({
         email: tourist_email,
@@ -51,7 +51,7 @@ const TouristsTableItem: FC<TouristsTableItemProps> = ({
       id,
       handleEditVal,
       handleOpenDelete,
-      handleOpenModal,
+      handleOpenUpdate,
       tourist_email,
       tourist_location,
       tourist_name,

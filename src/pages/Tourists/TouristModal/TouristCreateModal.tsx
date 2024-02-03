@@ -4,29 +4,27 @@ import Flexer from '@/components/Flexer';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 
-interface TouristsModalProps {
+interface TouristCreateModalProps {
   name: string;
   email: string;
   location: string;
   isLoading: boolean;
-  editMode: boolean;
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: SyntheticEvent) => void;
 }
 
-const TouristsModal: FC<TouristsModalProps> = ({
+const TouristCreateModal: FC<TouristCreateModalProps> = ({
   name,
   email,
   location,
   isLoading,
-  editMode,
   handleChange,
   handleSubmit,
 }) => {
   return (
     <form onSubmit={handleSubmit} className="px-2">
       <div className="text-center font-semibold text-xl">
-        {editMode ? `Edit existing Tourist` : `Add new Tourist`}
+        Edit existing Tourist
       </div>
       <Input
         id="name"
@@ -67,4 +65,4 @@ const TouristsModal: FC<TouristsModalProps> = ({
   );
 };
 
-export default TouristsModal;
+export default TouristCreateModal;

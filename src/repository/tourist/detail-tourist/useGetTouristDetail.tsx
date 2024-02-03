@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { logout } from '@/utils/logout';
+
 import { detailTourist } from '.';
 import type {
   DetailTouristResponse,
@@ -39,6 +41,8 @@ const useGetTouristDetail = ({
         if (resp?.id) {
           setData(resp);
         }
+      } else if (req.status === 401) {
+        logout();
       } else {
         setIsError(true);
       }
