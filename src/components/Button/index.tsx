@@ -4,6 +4,7 @@ interface ButtonProps {
   text: string;
   className?: string;
   disabled?: boolean;
+  type?: string;
   onClick?: () => void;
 }
 
@@ -11,6 +12,7 @@ const Button: FC<ButtonProps> = ({
   text,
   className,
   disabled = false,
+  type = 'primary',
   onClick = () => {},
 }) => {
   return (
@@ -20,7 +22,9 @@ const Button: FC<ButtonProps> = ({
       className={`p-2 rounded-md font-medium text-white ${className} ${
         disabled
           ? 'bg-gray-300 cursor-default'
-          : 'bg-primary hover:bg-primaryDarker'
+          : type === 'primary'
+          ? 'bg-primary hover:bg-primaryDarker'
+          : 'bg-red-600'
       } `}
     >
       {text}
